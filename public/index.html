@@ -1,0 +1,47 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raspberry Pi IoT Dashboard</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="chart"></canvas>
+    <script>
+        const socket = io();
+        const ctx = document.getElementById('chart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Temperatura (°C)',
+                        data: [],
+                        borderColor: 'blue',
+                        fill: false,
+                    },
+                    {
+                        label: 'Humedad (%)',
+                        data: [],
+                        borderColor: 'green',
+                        fill: false,
+                    },
+                ],
+            },
+        });
+
+        socket.on('data', (data) => {
+            const currentTime = new Date().toLocaleTimeString();
+            chart.data.labels.push(currentTime);
+            chart.data.datasets[0].data.push(data['Temperatura (°C)']);
+            chart.data.datasets[1].data.push(data['Humedad (%)']);
+            chart.update();
+        });
+    </script>
+</body>
+</html>
+
