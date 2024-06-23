@@ -5,6 +5,10 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const { Client, Message } = require('azure-iot-device');
 const Protocol = require('azure-iot-device-mqtt').Mqtt;
+const connectionString = process.env.connectionString;
+
+
+
 const config = require('./config');
 
 // Configura el cliente de dispositivo IoT
